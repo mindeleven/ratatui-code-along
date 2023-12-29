@@ -33,10 +33,26 @@ fn main() -> Result<()> {
     let mut terminal = Terminal::new(CrosstermBackend::new(stdout()))?;
     // app clears the screen
     terminal.clear()?;
-
+    
+    // within the main loop the application draws the ui 
+    //and then handles occurring events
     loop {
-        // TODO draw the UI
-        // TODO handle events
+        // drawing the terminal
+        // draw() is the main interaction point of an app
+        // draw() accepts a closure with a Frame as parameter
+        terminal.draw(|frame| {
+            // creating an area that is the full size of the terminal window
+            let area = frame.size();
+            // rendering a new Paragraph with white foreground text and a blue background
+            frame.render_widget(
+                Paragraph::new("Hello Ratatui! (press 'q' to quit)")
+                    // white() and on_blue() are defined in the Stylize 
+                    // extension trait as style shorthands
+                    .white()
+                    .on_blue(), 
+                area);
+
+        })?;
     }
     
     // (3) exiting the alternate screen
