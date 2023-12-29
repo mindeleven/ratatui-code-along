@@ -53,6 +53,20 @@ fn main() -> Result<()> {
                 area);
 
         })?;
+
+        // handling events
+        // checking to see if any events have occurred
+        // adding a small timeout to the event polling to ensure that the UI remains responsive
+        if event::poll(std::time::Duration::from_millis(16))? {
+            if let event::Event::Key(key) = event::read()? {
+                // check if event kind is Press for Windows
+                if key.kind == KeyEventKind::Press 
+                    && key.code == KeyCode::Char('q') 
+                {
+                    break;
+                }
+            }
+        }
     }
     
     // (3) exiting the alternate screen
