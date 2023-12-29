@@ -34,9 +34,16 @@ fn main() -> Result<()> {
     // app clears the screen
     terminal.clear()?;
 
-    // TODO main loop
-
+    loop {
+        // TODO draw the UI
+        // TODO handle events
+    }
+    
+    // (3) exiting the alternate screen
     stdout().execute(LeaveAlternateScreen)?;
+    // (4) disabling raw mode
+    // if app doesn’t disable raw mode before exit
+    // on a Linux / macOS terminal type reset to get out
     disable_raw_mode()?;
     
     Ok(())
