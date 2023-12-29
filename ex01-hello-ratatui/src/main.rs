@@ -21,6 +21,23 @@ use ratatui::{
 };
 use std::io::{stdout, Result};
 
-fn main() {
-    println!("Hello, world!");
+fn main() -> Result<()> {
+    // setting up and restoring the terminal
+    // (1) entering the alternate screen
+    stdout().execute(EnterAlternateScreen)?;
+    // (2) enabling raw mode
+    enable_raw_mode()?;
+    // turns off input and output processing by the terminal
+    // and gives app control over the screen
+    // creating a backend and Terminal
+    let mut terminal = Terminal::new(CrosstermBackend::new(stdout()))?;
+    // app clears the screen
+    terminal.clear()?;
+
+    // TODO main loop
+
+    stdout().execute(LeaveAlternateScreen)?;
+    disable_raw_mode()?;
+    
+    Ok(())
 }
