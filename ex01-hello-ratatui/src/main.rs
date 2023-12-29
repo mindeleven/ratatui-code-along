@@ -61,7 +61,7 @@ fn main() -> Result<()> {
             if let event::Event::Key(key) = event::read()? {
                 // check if event kind is Press for Windows
                 if key.kind == KeyEventKind::Press 
-                    && key.code == KeyCode::Char('q') 
+                    && (key.code == KeyCode::Char('q') || key.code == KeyCode::Char('Q') )
                 {
                     break;
                 }
