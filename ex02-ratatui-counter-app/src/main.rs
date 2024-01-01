@@ -11,9 +11,9 @@ use ratatui::{
     prelude::{CrosstermBackend, Terminal},
     widgets::Paragraph
 };
-use std::io;
+use std::io::Result;
 
-fn main() -> io::Result<()> {
+fn main() -> Result<()> {
     // defining counter variable to track the "state" of the app
     let mut counter = 0;
     
