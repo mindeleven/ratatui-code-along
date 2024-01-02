@@ -11,7 +11,10 @@ use ratatui::{
     prelude::{CrosstermBackend, Terminal},
     widgets::Paragraph
 };
-use std::io::Result;
+
+/// defining custom types and aliases
+type Err = Box<dyn std::error::Error>;
+type Result<T> = std::result::Result<T, Err>;
 
 fn main() -> Result<()> {
     // defining counter variable to track the "state" of the app
