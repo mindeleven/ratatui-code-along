@@ -6,6 +6,12 @@
 /// the counter should be increment or decrement when a key is pressed
 /// (j for increment and k for decrement)
 /// 
+/// importing the necessary components from crossterm
+use crossterm::{
+    event::{self, Event::Key, KeyCode::Char},
+    execute,
+    terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen},
+};
 /// importing the necessary components from ratatui
 use ratatui::{
     prelude::{CrosstermBackend, Terminal},
@@ -41,12 +47,16 @@ fn main() -> Result<()> {
     */
     startup()?;
 
-    run()?;
 
+
+    /* 
+    // MAIN application code (gets replaced with run() function):
+    */
     // creating an instance of a terminal backend with crossterm
     let mut terminal = Terminal::new(
         CrosstermBackend::new(std::io::stderr())
     )?;
+    run()?;
 
     // TODO do something after terminal has been created
     // the main application loop
@@ -120,14 +130,42 @@ fn ui() {
   }
   
 // (4) functionality to processes user input and update app state 
-fn update() {
-  unimplemented!()
+fn update(app: &mut App) -> Result<()> {
+    // update state based on user input
+    
+    // break from loop based on user input and/or state
+    // checking for user input
+    if event::poll(std::time::Duration::from_millis(250))? {
+        if let event::Event::Key(key) = event::read()? {
+            // widows sends key event twice, for KeyEventKind::Press and KeyEventKind::Release
+            // so we've to make sure that key.kind is KeyEventKind::Press only
+            if key.kind == event::KeyEventKind::Press {
+                match key.code {
+                    // 'j' adds 1 to the counter
+                    event::KeyCode::Char('j') => app.counter += 1,
+                    // 'k' subtracts 1 to from counter
+                    event::KeyCode::Char('k') => app.counter -= 1,
+                    // 'q' breaks the app
+                    // break here would be outside of loop
+                    // therefore we need the should_quit flag
+                    event::KeyCode::Char('q') => app.should_quit = true,
+                    _ => {},
+                }
+            }
+        }
+    }
+
+    Ok(())
 }
 
 // (5) functionality that contains the main loop
 fn run() -> Result<()> {
     // get a new ratatui terminal
-    
+    // creating an instance of a terminal backend with crossterm
+    let mut terminal = Terminal::new(
+        CrosstermBackend::new(std::io::stderr())
+    )?;
+
     // set the application state
     let mut app = App {counter: 0, should_quit: false};
 
@@ -136,6 +174,7 @@ fn run() -> Result<()> {
         // render
 
         // update
+        update(&mut app)?;
 
         // exit
         break;
