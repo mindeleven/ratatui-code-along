@@ -28,7 +28,8 @@ struct App {
 fn main() -> Result<()> {
     // defining counter variable to track the "state" of the app
     let mut counter = 0;
-    
+    /* 
+    // STARTUP code (gets replaced with startup() function):
     // using crossterm to set the terminal to raw mode
     // I guess crossterm comes with the prelude from ratatui ?
     // function needs to return an io::Result<()> to catch the error
@@ -37,6 +38,8 @@ fn main() -> Result<()> {
     crossterm::terminal::enable_raw_mode()?;
     // then enter an alternate screen
     crossterm::execute!(std::io::stderr(), crossterm::terminal::EnterAlternateScreen)?;
+    */
+    startup()?;
 
     // creating an instance of a terminal backend with crossterm
     let mut terminal = Terminal::new(
@@ -92,8 +95,11 @@ fn main() -> Result<()> {
 
 // breaking up the main() function
 // (1) functuinality to initialize the terminal
-fn startup() {
-    unimplemented!()
+fn startup() -> Result<()> {
+    crossterm::terminal::enable_raw_mode()?;
+    // then enter an alternate screen
+    crossterm::execute!(std::io::stderr(), crossterm::terminal::EnterAlternateScreen)?;
+    Ok(())
   }
   
 // (2) functuinality to clean up the terminal
