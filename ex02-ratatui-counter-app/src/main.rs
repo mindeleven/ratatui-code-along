@@ -38,6 +38,7 @@ fn main() -> Result<()> {
     // Main application loop
     loop {
         // draw UI based on state
+        // closure passed to the Terminal::draw() method must render the entire UI
         terminal.draw(|f| {
             f.render_widget(Paragraph::new(
                 format!("Counter: {}", counter)), f.size()
@@ -50,9 +51,18 @@ fn main() -> Result<()> {
         // checking for user input
         if crossterm::event::poll(std::time::Duration::from_millis(250))? {
             if let crossterm::event::Event::Key(key) = crossterm::event::read()? {
-                match key.code {
-                    crossterm::event::KeyCode::Char('q') => break,
-                    _ => {},
+                // widows sends key event twice, for KeyEventKind::Press and KeyEventKind::Release
+                // so we've to make sure that key.kind is KeyEventKind::Press only
+                if key.kind == crossterm::event::KeyEventKind::Press {
+                    match key.code {
+                        // 'j' adds 1 to the counter
+                        crossterm::event::KeyCode::Char('j') => counter += 1,
+                        // 'k' subtracts 1 to from counter
+                        crossterm::event::KeyCode::Char('k') => counter -= 1,
+                        // 'q' breaks the app
+                        crossterm::event::KeyCode::Char('q') => break,
+                        _ => {},
+                    }
                 }
             }
         }
