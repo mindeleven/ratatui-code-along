@@ -89,3 +89,29 @@ fn main() -> Result<()> {
 
     Ok(())
 }
+
+// breaking up the main() function
+// (1) functuinality to initialize the terminal
+fn startup() {
+    unimplemented!()
+  }
+  
+// (2) functuinality to clean up the terminal
+fn shutdown() {
+    unimplemented!()
+  }
+  
+// (3) functionality to render the application state
+fn ui() {
+    unimplemented!()
+  }
+  
+// (4) functionality to processes user input and update app state 
+fn update() {
+  unimplemented!()
+}
+
+// (5) functionality that contains the main loop
+fn run() {
+    unimplemented!()
+}
