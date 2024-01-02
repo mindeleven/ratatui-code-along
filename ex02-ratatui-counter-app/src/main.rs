@@ -16,6 +16,15 @@ use ratatui::{
 type Err = Box<dyn std::error::Error>;
 type Result<T> = std::result::Result<T, Err>;
 
+// defining an App struct to encapsulate the application state
+struct App {
+    // current state of the counter
+    counter: i64,
+    // flag that indicates whether app should exit main loop
+    should_quit:  bool,
+}
+
+
 fn main() -> Result<()> {
     // defining counter variable to track the "state" of the app
     let mut counter = 0;
