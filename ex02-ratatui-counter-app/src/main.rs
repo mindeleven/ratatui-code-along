@@ -41,6 +41,8 @@ fn main() -> Result<()> {
     */
     startup()?;
 
+    run()?;
+
     // creating an instance of a terminal backend with crossterm
     let mut terminal = Terminal::new(
         CrosstermBackend::new(std::io::stderr())
@@ -123,6 +125,21 @@ fn update() {
 }
 
 // (5) functionality that contains the main loop
-fn run() {
-    unimplemented!()
+fn run() -> Result<()> {
+    // get a new ratatui terminal
+    
+    // set the application state
+    let mut app = App {counter: 0, should_quit: false};
+
+    // the main loop controlling the app
+    loop {
+        // render
+
+        // update
+
+        // exit
+        break;
+    }
+
+    Ok(())
 }
