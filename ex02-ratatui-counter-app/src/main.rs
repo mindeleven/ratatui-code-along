@@ -83,10 +83,14 @@ fn main() -> Result<()> {
         }
     }
 
+    /*
+    // SHUTDOWN code (gets replaced with shutdown() function):
     // disable raw mode for a clean exit, then exit the alternate screen
     crossterm::execute!(std::io::stderr(), crossterm::terminal::LeaveAlternateScreen)?;
     // then exit the alternate screen and returns to its original state
     crossterm::terminal::disable_raw_mode()?;
+    */
+    shutdown()?;
 
     println!("Alternate screen successfully exited");
 
@@ -97,14 +101,15 @@ fn main() -> Result<()> {
 // (1) functuinality to initialize the terminal
 fn startup() -> Result<()> {
     crossterm::terminal::enable_raw_mode()?;
-    // then enter an alternate screen
     crossterm::execute!(std::io::stderr(), crossterm::terminal::EnterAlternateScreen)?;
     Ok(())
   }
   
 // (2) functuinality to clean up the terminal
-fn shutdown() {
-    unimplemented!()
+fn shutdown() -> Result<()> {
+    crossterm::execute!(std::io::stderr(), crossterm::terminal::LeaveAlternateScreen)?;
+    crossterm::terminal::disable_raw_mode()?;
+    Ok(())
   }
   
 // (3) functionality to render the application state
