@@ -33,7 +33,7 @@ struct App {
 
 fn main() -> Result<()> {
     // defining counter variable to track the "state" of the app
-    let mut counter = 0;
+    // let mut counter = 0;
     /* 
     // STARTUP code (gets replaced with startup() function):
     // using crossterm to set the terminal to raw mode
@@ -47,16 +47,13 @@ fn main() -> Result<()> {
     */
     startup()?;
 
-
-
     /* 
     // MAIN application code (gets replaced with run() function):
-    */
+    
     // creating an instance of a terminal backend with crossterm
     let mut terminal = Terminal::new(
         CrosstermBackend::new(std::io::stderr())
     )?;
-    run()?;
 
     // TODO do something after terminal has been created
     // the main application loop
@@ -94,6 +91,8 @@ fn main() -> Result<()> {
             }
         }
     }
+    */
+    let status = run();
 
     /*
     // SHUTDOWN code (gets replaced with shutdown() function):
@@ -104,7 +103,7 @@ fn main() -> Result<()> {
     */
     shutdown()?;
 
-    println!("Alternate screen successfully exited");
+    status?;
 
     Ok(())
 }
