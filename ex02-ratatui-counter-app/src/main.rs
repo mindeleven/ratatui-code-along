@@ -14,7 +14,7 @@ use crossterm::{
 };
 /// importing the necessary components from ratatui
 use ratatui::{
-    prelude::{CrosstermBackend, Terminal},
+    prelude::{CrosstermBackend, Terminal, Frame},
     widgets::Paragraph
 };
 
@@ -125,9 +125,11 @@ fn shutdown() -> Result<()> {
   }
   
 // (3) functionality to render the application state
-fn ui() {
-    unimplemented!()
-  }
+fn ui(app: &mut App, f: &mut Frame) {
+    f.render_widget(Paragraph::new(
+        format!("Counter: {}", app.counter)), f.size()
+    );
+}
   
 // (4) functionality to processes user input and update app state 
 fn update(app: &mut App) -> Result<()> {
@@ -172,12 +174,17 @@ fn run() -> Result<()> {
     // the main loop controlling the app
     loop {
         // render
+        terminal.draw(|f| {
+            ui(&mut app, f);
+        })?;
 
         // update
         update(&mut app)?;
 
         // exit
-        break;
+        if app.should_quit {
+            break;
+        }
     }
 
     Ok(())
