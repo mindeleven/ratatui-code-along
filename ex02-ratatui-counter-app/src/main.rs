@@ -6,6 +6,8 @@
 /// the counter should be increment or decrement when a key is pressed
 /// (j for increment and k for decrement)
 /// 
+/// importing the app module
+mod app;
 /// importing the tui module
 mod tui;
 
@@ -24,30 +26,6 @@ use ratatui::{
 /// defining custom types and aliases
 type Err = Box<dyn std::error::Error>;
 type Result<T> = std::result::Result<T, Err>;
-
-/// defining an App struct to encapsulate the application state
-/// derives Default trait to have reasonable defaults
-/// App::default() will create an App with counter = 0 and running_state = RunningState::Running
-#[derive(Debug, Default)]
-struct App {
-    // current state of the counter
-    // an i64 for now, u8 later on according to new tutorial
-    counter: i64,
-    // flag that indicates whether app should exit main loop
-    // gets replaced with running state, so remove later
-    should_quit:  bool,
-    // state of the app
-    running_state: RunningState,
-}
-
-// representing the state of the application with an enum
-#[derive(Debug, Default, PartialEq, Eq)]
-enum RunningState {
-    #[default]
-    Running,
-    Finished
-}
-
 
 fn main() -> Result<()> {
     // initialize the terminal
@@ -92,14 +70,14 @@ fn shutdown() -> Result<()> {
 */
 
 // (3) functionality to render the application state
-fn ui(app: &mut App, f: &mut Frame) {
+fn ui(app: &mut app::App, f: &mut Frame) {
     f.render_widget(Paragraph::new(
         format!("Counter: {}", app.counter)), f.size()
     );
 }
   
 // (4) functionality to processes user input and update app state 
-fn update(app: &mut App) -> Result<()> {
+fn update(app: &mut app::App) -> Result<()> {
     // update state based on user input
     
     // break from loop based on user input and/or state
@@ -136,7 +114,7 @@ fn run() -> Result<()> {
     )?;
 
     // set the application state
-    let mut app = App {counter: 0, should_quit: false, running_state: RunningState::Running};
+    let mut app = app::App {counter: 0, should_quit: false, running_state: app::RunningState::Running};
 
     // the main loop controlling the app
     loop {
