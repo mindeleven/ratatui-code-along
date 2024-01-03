@@ -92,6 +92,13 @@ fn main() -> Result<()> {
         }
     }
     */
+    // (1st) we get the result of run() (the status)
+    // then (2nd) we call shutdown() 
+    // and after that (3rd) we unwrap() the result
+    // be keeping this order, we ensure
+    // that shutdown() is always called before the program exits
+
+    // (1st)
     let status = run();
 
     /*
@@ -101,8 +108,12 @@ fn main() -> Result<()> {
     // then exit the alternate screen and returns to its original state
     crossterm::terminal::disable_raw_mode()?;
     */
+    // leaving the alternate screen and disabling raw mode
+    // (2nd)
     shutdown()?;
-
+    
+    // unwrapping the result
+    // (3rd)
     status?;
 
     Ok(())
