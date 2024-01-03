@@ -20,3 +20,22 @@ pub enum RunningState {
     Running,
     Finished
 }
+
+// implementing the functionality of the main loop
+impl App {
+    pub fn run() {
+        unimplemented!()
+    }
+
+    pub fn is_finished() {
+        unimplemented!()
+    }
+
+    pub fn render_frame() {
+        unimplemented!()
+    }
+
+    pub fn update() {
+        unimplemented!()
+    }
+}
