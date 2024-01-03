@@ -6,9 +6,6 @@
 /// the counter should be increment or decrement when a key is pressed
 /// (j for increment and k for decrement)
 /// 
-/// importing the tui module
-mod tui;
-
 /// importing the necessary components from crossterm
 use crossterm::{
     event::{self, Event::Key, KeyCode::Char},
