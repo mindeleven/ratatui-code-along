@@ -12,8 +12,8 @@ mod tui;
 /// importing the necessary components from crossterm
 use crossterm::{
     event::{self, Event::Key, KeyCode::Char},
-    execute,
-    terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen},
+    // execute,
+    // terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen},
 };
 /// importing the necessary components from ratatui
 use ratatui::{
@@ -65,7 +65,8 @@ fn main() -> Result<()> {
 
     // leaving the alternate screen and disabling raw mode
     // (2nd)
-    shutdown()?;
+    // shutdown()?;
+    tui::restore()?;
 
     // unwrapping the result
     // (3rd)
@@ -74,22 +75,22 @@ fn main() -> Result<()> {
     Ok(())
 }
 
+/* 
 // breaking up the main() function
 // (1) functuinality to initialize the terminal
-/* 
 fn startup() -> Result<()> {
     enable_raw_mode()?;
     execute!(std::io::stderr(), EnterAlternateScreen)?;
     Ok(())
   }
-*/
 // (2) functuinality to clean up the terminal
 fn shutdown() -> Result<()> {
     execute!(std::io::stderr(), LeaveAlternateScreen)?;
     disable_raw_mode()?;
     Ok(())
   }
-  
+*/
+
 // (3) functionality to render the application state
 fn ui(app: &mut App, f: &mut Frame) {
     f.render_widget(Paragraph::new(
