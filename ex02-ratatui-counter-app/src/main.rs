@@ -111,7 +111,7 @@ fn main() -> Result<()> {
     // leaving the alternate screen and disabling raw mode
     // (2nd)
     shutdown()?;
-    
+
     // unwrapping the result
     // (3rd)
     status?;
@@ -122,15 +122,15 @@ fn main() -> Result<()> {
 // breaking up the main() function
 // (1) functuinality to initialize the terminal
 fn startup() -> Result<()> {
-    crossterm::terminal::enable_raw_mode()?;
-    crossterm::execute!(std::io::stderr(), crossterm::terminal::EnterAlternateScreen)?;
+    enable_raw_mode()?;
+    execute!(std::io::stderr(), EnterAlternateScreen)?;
     Ok(())
   }
   
 // (2) functuinality to clean up the terminal
 fn shutdown() -> Result<()> {
-    crossterm::execute!(std::io::stderr(), crossterm::terminal::LeaveAlternateScreen)?;
-    crossterm::terminal::disable_raw_mode()?;
+    execute!(std::io::stderr(), LeaveAlternateScreen)?;
+    disable_raw_mode()?;
     Ok(())
   }
   
@@ -148,19 +148,19 @@ fn update(app: &mut App) -> Result<()> {
     // break from loop based on user input and/or state
     // checking for user input
     if event::poll(std::time::Duration::from_millis(250))? {
-        if let event::Event::Key(key) = event::read()? {
+        if let Key(key) = event::read()? {
             // widows sends key event twice, for KeyEventKind::Press and KeyEventKind::Release
             // so we've to make sure that key.kind is KeyEventKind::Press only
             if key.kind == event::KeyEventKind::Press {
                 match key.code {
                     // 'j' adds 1 to the counter
-                    event::KeyCode::Char('j') => app.counter += 1,
+                    Char('j') => app.counter += 1,
                     // 'k' subtracts 1 to from counter
-                    event::KeyCode::Char('k') => app.counter -= 1,
+                    Char('k') => app.counter -= 1,
                     // 'q' breaks the app
                     // break here would be outside of loop
                     // therefore we need the should_quit flag
-                    event::KeyCode::Char('q') => app.should_quit = true,
+                    Char('q') => app.should_quit = true,
                     _ => {},
                 }
             }
