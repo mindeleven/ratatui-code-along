@@ -25,76 +25,35 @@ use ratatui::{
 type Err = Box<dyn std::error::Error>;
 type Result<T> = std::result::Result<T, Err>;
 
-// defining an App struct to encapsulate the application state
+/// defining an App struct to encapsulate the application state
+/// derives Default trait to have reasonable defaults
+/// App::default() will create an App with counter = 0 and running_state = RunningState::Running
+#[derive(Debug, Default)]
 struct App {
     // current state of the counter
+    // an i64 for now, u8 later on according to new tutorial
     counter: i64,
     // flag that indicates whether app should exit main loop
+    // gets replaced with running state, so remove later
     should_quit:  bool,
+    // state of the app
+    running_state: RunningState,
+}
+
+// representing the state of the application with an enum
+#[derive(Debug, Default, PartialEq, Eq)]
+enum RunningState {
+    #[default]
+    Running,
+    Finished
 }
 
 
 fn main() -> Result<()> {
-    // defining counter variable to track the "state" of the app
-    // let mut counter = 0;
-    /* 
-    // STARTUP code (gets replaced with startup() function):
-    // using crossterm to set the terminal to raw mode
-    // I guess crossterm comes with the prelude from ratatui ?
-    // function needs to return an io::Result<()> to catch the error
-    // like in the example at
-    // https://docs.rs/crossterm/latest/crossterm/terminal/index.html#raw-mode
-    crossterm::terminal::enable_raw_mode()?;
-    // then enter an alternate screen
-    crossterm::execute!(std::io::stderr(), crossterm::terminal::EnterAlternateScreen)?;
-    */
-    startup()?;
+    // initialize the terminal
+    // startup()?;
+    tui::init()?;
 
-    /* 
-    // MAIN application code (gets replaced with run() function):
-    
-    // creating an instance of a terminal backend with crossterm
-    let mut terminal = Terminal::new(
-        CrosstermBackend::new(std::io::stderr())
-    )?;
-
-    // TODO do something after terminal has been created
-    // the main application loop
-    // within the loop the app checks for user input,
-    // updates the state and updates the display
-    // Main application loop
-    loop {
-        // draw UI based on state
-        // closure passed to the Terminal::draw() method must render the entire UI
-        terminal.draw(|f| {
-            f.render_widget(Paragraph::new(
-                format!("Counter: {}", counter)), f.size()
-            );
-        })?;
-        
-        // update state based on user input
-        
-        // break from loop based on user input and/or state
-        // checking for user input
-        if crossterm::event::poll(std::time::Duration::from_millis(250))? {
-            if let crossterm::event::Event::Key(key) = crossterm::event::read()? {
-                // widows sends key event twice, for KeyEventKind::Press and KeyEventKind::Release
-                // so we've to make sure that key.kind is KeyEventKind::Press only
-                if key.kind == crossterm::event::KeyEventKind::Press {
-                    match key.code {
-                        // 'j' adds 1 to the counter
-                        crossterm::event::KeyCode::Char('j') => counter += 1,
-                        // 'k' subtracts 1 to from counter
-                        crossterm::event::KeyCode::Char('k') => counter -= 1,
-                        // 'q' breaks the app
-                        crossterm::event::KeyCode::Char('q') => break,
-                        _ => {},
-                    }
-                }
-            }
-        }
-    }
-    */
     // (1st) we get the result of run() (the status)
     // then (2nd) we call shutdown() 
     // and after that (3rd) we unwrap() the result
@@ -104,13 +63,6 @@ fn main() -> Result<()> {
     // (1st)
     let status = run();
 
-    /*
-    // SHUTDOWN code (gets replaced with shutdown() function):
-    // disable raw mode for a clean exit, then exit the alternate screen
-    crossterm::execute!(std::io::stderr(), crossterm::terminal::LeaveAlternateScreen)?;
-    // then exit the alternate screen and returns to its original state
-    crossterm::terminal::disable_raw_mode()?;
-    */
     // leaving the alternate screen and disabling raw mode
     // (2nd)
     shutdown()?;
@@ -124,12 +76,13 @@ fn main() -> Result<()> {
 
 // breaking up the main() function
 // (1) functuinality to initialize the terminal
+/* 
 fn startup() -> Result<()> {
     enable_raw_mode()?;
     execute!(std::io::stderr(), EnterAlternateScreen)?;
     Ok(())
   }
-  
+*/
 // (2) functuinality to clean up the terminal
 fn shutdown() -> Result<()> {
     execute!(std::io::stderr(), LeaveAlternateScreen)?;
@@ -182,7 +135,7 @@ fn run() -> Result<()> {
     )?;
 
     // set the application state
-    let mut app = App {counter: 0, should_quit: false};
+    let mut app = App {counter: 0, should_quit: false, running_state: RunningState::Running};
 
     // the main loop controlling the app
     loop {
