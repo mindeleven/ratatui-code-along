@@ -1,3 +1,6 @@
+use std::io;
+use ratatui::Frame;
+
 /// defining an App struct to encapsulate the application state
 /// derives Default trait to have reasonable defaults
 /// App::default() will create an App with counter = 0 and running_state = RunningState::Running
@@ -26,16 +29,20 @@ impl App {
     pub fn run() {
         unimplemented!()
     }
+    
+    pub fn finish(&mut self) {
+        self.running_state = RunningState::Finished;
+    } 
 
-    pub fn is_finished() {
+    pub fn is_finished(&mut self) -> bool {
+        self.running_state == RunningState::Finished
+    }
+
+    pub fn render_frame(&mut self, frame: &mut Frame) {
         unimplemented!()
     }
 
-    pub fn render_frame() {
-        unimplemented!()
-    }
-
-    pub fn update() {
+    pub fn update(&mut self) -> io::Result<()> {
         unimplemented!()
     }
 }
