@@ -1,5 +1,6 @@
 use std::io;
-use ratatui::Frame;
+use crossterm::style::SetForegroundColor;
+use ratatui::{Frame, Terminal, backend::Backend};
 
 /// defining an App struct to encapsulate the application state
 /// derives Default trait to have reasonable defaults
@@ -26,8 +27,17 @@ pub enum RunningState {
 
 // implementing the functionality of the main loop
 impl App {
-    pub fn run() {
-        unimplemented!()
+    pub fn run(
+        &mut self,
+        terminal: &mut Terminal<impl Backend>
+    ) -> io::Result<()> {
+        while !self.is_finished() {
+            terminal.draw(|frame| {
+                self.render_frame(frame);
+            });
+            self.update()?;
+        }
+        Ok(())
     }
     
     pub fn finish(&mut self) {
