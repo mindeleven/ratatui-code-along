@@ -1,16 +1,21 @@
 use std::io;
 use crossterm::style::SetForegroundColor;
 
-use crossterm::{
-    event::{self, Event::Key, KeyCode::Char},
+use crossterm::event::{
+    self,
+    Event::Key, 
+    KeyCode::Char
 };
 
 use ratatui::{
-    Frame, 
-    Terminal, 
-    backend::Backend,
-    widgets::Paragraph
+    prelude::*,
+    symbols::border,
+    widgets::{
+        block::{Position, Title},
+        *,
+    },
 };
+
 
 /// defining an App struct to encapsulate the application state
 /// derives Default trait to have reasonable defaults
@@ -58,10 +63,43 @@ impl App {
     pub fn is_finished(&mut self) -> bool {
         self.running_state == RunningState::Finished
     }
-
+    
+    // rendering the frame, source code from 
+    // https://counter-tutorial-rewrite.ratatui.pages.dev/tutorials/counter-app/basic-app/
+    // TODO: some research on styling widgets
     pub fn render_frame(&mut self, frame: &mut Frame) {
-        frame.render_widget(Paragraph::new(
-            format!("Counter: {}", self.counter)), frame.size()
+        let title = Title::from(" Counter App Tutorial ".bold());
+        let instructions = Title::from(
+            Line::from(vec![
+                " Decrement ".into(),
+                "<Left>".blue().bold(),
+                " Increment ".into(),
+                "<Right>".blue().bold(),
+                " Quit ".into(),
+                "<Q> ".blue().bold(),
+            ])
+        );
+        let block = Block::default()
+            .title(title.alignment(Alignment::Center))
+            .title(
+                instructions
+                    .position(Position::Bottom)
+                    .alignment(Alignment::Center),
+            )
+            .borders(Borders::ALL)
+            .border_set(border::THICK);
+
+        let text = Text::from(vec![Line::from(vec![
+            "Value: ".into(),
+            // here we get the counter
+            self.counter.to_string().yellow(),
+        ])]);
+
+        frame.render_widget(
+            Paragraph::new(text)
+                .alignment(Alignment::Center)
+                .block(block),
+            frame.size()
         );
     }
   
