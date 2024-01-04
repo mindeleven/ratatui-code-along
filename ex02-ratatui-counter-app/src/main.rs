@@ -12,22 +12,24 @@ mod app;
 mod tui;
 
 /// importing the necessary components from crossterm
+/* 
 use crossterm::{
     event::{self, Event::Key, KeyCode::Char},
     // execute,
     // terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen},
 };
+
 /// importing the necessary components from ratatui
 use ratatui::{
     prelude::{CrosstermBackend, Terminal, Frame},
     widgets::Paragraph
 };
-
+*/
 /// defining custom types and aliases
-type Err = Box<dyn std::error::Error>;
-type Result<T> = std::result::Result<T, Err>;
+// type Err = Box<dyn std::error::Error>;
+// type Result<T> = std::result::Result<T, Err>;
 
-fn main() -> Result<()> {
+fn main() -> std::io::Result<()> {
     // initialize the terminal
     // startup()?;
     
@@ -53,7 +55,7 @@ fn main() -> Result<()> {
     // unwrapping the result
     // (3rd)
     status?;
-    
+
     Ok(())
 }
 
@@ -72,14 +74,14 @@ fn shutdown() -> Result<()> {
     Ok(())
   }
 */
-
+/*
 // (3) functionality to render the application state
 fn ui(app: &mut app::App, f: &mut Frame) {
     f.render_widget(Paragraph::new(
         format!("Counter: {}", app.counter)), f.size()
     );
 }
-  
+
 // (4) functionality to processes user input and update app state 
 fn update(app: &mut app::App) -> Result<()> {
     // update state based on user input
@@ -138,3 +140,4 @@ fn run() -> Result<()> {
 
     Ok(())
 }
+*/
