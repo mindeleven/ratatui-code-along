@@ -1,6 +1,16 @@
 use std::io;
 use crossterm::style::SetForegroundColor;
-use ratatui::{Frame, Terminal, backend::Backend};
+
+use crossterm::{
+    event::{self, Event::Key, KeyCode::Char},
+};
+
+use ratatui::{
+    Frame, 
+    Terminal, 
+    backend::Backend,
+    widgets::Paragraph
+};
 
 /// defining an App struct to encapsulate the application state
 /// derives Default trait to have reasonable defaults
@@ -49,10 +59,31 @@ impl App {
     }
 
     pub fn render_frame(&mut self, frame: &mut Frame) {
-        unimplemented!()
+        frame.render_widget(Paragraph::new(
+            format!("Counter: {}", self.counter)), frame.size()
+        );
     }
 
     pub fn update(&mut self) -> io::Result<()> {
-        unimplemented!()
+        if event::poll(std::time::Duration::from_millis(250))? {
+            if let Key(key) = event::read()? {
+                // widows sends key event twice, for KeyEventKind::Press and KeyEventKind::Release
+                // so we've to make sure that key.kind is KeyEventKind::Press only
+                if key.kind == event::KeyEventKind::Press {
+                    match key.code {
+                        // 'j' adds 1 to the counter
+                        Char('j') => self.counter += 1,
+                        // 'k' subtracts 1 to from counter
+                        Char('k') => self.counter -= 1,
+                        // 'q' breaks the self.                        // break here would be outside of loop
+                        // therefore we need the should_quit flag
+                        Char('q') => self.finish(),
+                        _ => {},
+                    }
+                }
+            }
+        }
+    
+        Ok(())
     }
 }

@@ -30,7 +30,10 @@ type Result<T> = std::result::Result<T, Err>;
 fn main() -> Result<()> {
     // initialize the terminal
     // startup()?;
-    tui::init()?;
+    
+    //tui::init()?;
+
+    let mut terminal = tui::init()?;
 
     // (1st) we get the result of run() (the status)
     // then (2nd) we call shutdown() 
@@ -39,7 +42,8 @@ fn main() -> Result<()> {
     // that shutdown() is always called before the program exits
 
     // (1st)
-    let status = run();
+   // let status = run();
+    let status = app::App::default().run(&mut terminal);
 
     // leaving the alternate screen and disabling raw mode
     // (2nd)
@@ -49,7 +53,7 @@ fn main() -> Result<()> {
     // unwrapping the result
     // (3rd)
     status?;
-
+    
     Ok(())
 }
 
