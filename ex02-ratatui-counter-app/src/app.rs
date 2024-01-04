@@ -41,10 +41,11 @@ impl App {
         &mut self,
         terminal: &mut Terminal<impl Backend>
     ) -> io::Result<()> {
+        // while implements the main loop
         while !self.is_finished() {
             terminal.draw(|frame| {
                 self.render_frame(frame);
-            });
+            })?;
             self.update()?;
         }
         Ok(())
@@ -63,7 +64,7 @@ impl App {
             format!("Counter: {}", self.counter)), frame.size()
         );
     }
-
+  
     pub fn update(&mut self) -> io::Result<()> {
         if event::poll(std::time::Duration::from_millis(250))? {
             if let Key(key) = event::read()? {
