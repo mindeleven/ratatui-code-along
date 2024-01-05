@@ -123,3 +123,41 @@ impl App {
         Ok(())
     }
 }
+
+/// testing the UI Output of render_frame with TestBackend
+/// https://docs.rs/ratatui/latest/ratatui/backend/struct.TestBackend.html
+#[cfg(test)]
+mod test {
+    use super::*;
+    use ratatui::backend::TestBackend;
+
+    #[test]
+    fn render_frame() {
+        let app = App::default();
+        let backend = TestBackend::new(50, 4);
+        let mut terminal = Terminal::new(backend).expect("terminal");
+        
+        terminal
+            .draw(|frame| app.render_frame(frame))
+            .expect("draw");
+
+        let mut expected = Buffer::with_lines(vec![
+            "┏━━━━━━━━━━━━━ Counter App Tutorial ━━━━━━━━━━━━━┓",
+            "┃                    Value: 0                    ┃",
+            "┃                                                ┃",
+            "┗━ Decrement <Left> Increment <Right> Quit <Q> ━━┛",
+        ]);
+        let title_style = Style::new().bold();
+        let counter_style = Style::new().yellow();
+        let key_style = Style::new().blue().bold();
+        expected.set_style(Rect::new(14, 0, 22, 1), title_style);
+        expected.set_style(Rect::new(28, 1, 1, 1), counter_style);
+        expected.set_style(Rect::new(13, 3, 6, 1), key_style);
+        expected.set_style(Rect::new(30, 3, 7, 1), key_style);
+        expected.set_style(Rect::new(43, 3, 4, 1), key_style);
+
+        terminal.backend().assert_buffer(&expected);
+    }
+
+}
+
