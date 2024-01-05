@@ -1,12 +1,9 @@
 use std::io;
-use crossterm::style::SetForegroundColor;
-
 use crossterm::event::{
     self,
     Event::Key, 
     KeyCode::Char
 };
-
 use ratatui::{
     prelude::*,
     symbols::border,
