@@ -133,7 +133,7 @@ mod test {
 
     #[test]
     fn render_frame() {
-        let app = App::default();
+        let mut app = App::default();
         let backend = TestBackend::new(50, 4);
         let mut terminal = Terminal::new(backend).expect("terminal");
         
