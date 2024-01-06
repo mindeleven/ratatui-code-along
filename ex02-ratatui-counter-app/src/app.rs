@@ -1,8 +1,9 @@
 use std::io;
 use crossterm::event::{
     self,
-    Event::Key, 
-    KeyCode::Char
+    Event::{self, Key}, 
+    KeyCode::{self, Char},
+    KeyEvent
 };
 use ratatui::{
     prelude::*,
@@ -100,7 +101,14 @@ impl App {
         );
     }
   
+    // application only accepts key events via the standard iput
+    // function updates the app's state based on user input
     pub fn update(&mut self) -> io::Result<()> {
+        match event::read()? {
+            Event::Key(key_event) => self.handle_key_event(key_event),
+            _ => {}
+        };
+        /* 
         if event::poll(std::time::Duration::from_millis(250))? {
             if let Key(key) = event::read()? {
                 // widows sends key event twice, for KeyEventKind::Press and KeyEventKind::Release
@@ -119,9 +127,36 @@ impl App {
                 }
             }
         }
-    
+        */
         Ok(())
     }
+
+    // helper functions for handling keyboard events
+    fn handle_key_event(&mut self, key_event: KeyEvent) {
+        if key_event.kind != event::KeyEventKind::Press {
+            return;
+        }
+        match key_event.code {
+            // 'j' adds 1 to the counter
+            KeyCode::Right => self.increment(),
+            // 'k' subtracts 1 to from counter
+            KeyCode::Left => self.decrement(),
+            // 'q' breaks the self.                        
+            // break here would be outside of loop
+            // therefore we need the should_quit flag
+            KeyCode::Char('q') | KeyCode::Char('Q') => self.finish(),
+            _ => {},
+        }
+    }
+
+    fn increment(&mut self) {
+        self.counter += 1;
+    }
+
+    fn decrement(&mut self) {
+        self.counter -= 1;
+    }
+
 }
 
 /// testing the UI Output of render_frame with TestBackend
