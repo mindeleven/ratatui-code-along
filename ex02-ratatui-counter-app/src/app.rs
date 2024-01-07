@@ -1,4 +1,7 @@
-use std::io;
+use color_eyre::{
+    config::HookBuilder,
+    eyre::{self, bail, WrapErr}
+};
 use crossterm::event::{
     self,
     Event, 
@@ -13,7 +16,8 @@ use ratatui::{
         *,
     },
 };
-
+use std::io;
+use std::panic;
 
 /// defining an App struct to encapsulate the application state
 /// derives Default trait to have reasonable defaults
